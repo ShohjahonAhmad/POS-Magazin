@@ -1,0 +1,13 @@
+import { Router } from "express";
+import * as rasxodControllers from '../controllers/rasxodlar.js'
+import * as validation from '../middleware/validation.js'
+
+const router = Router();
+
+router.get('/', validation.validateRasxodQuery, rasxodControllers.getRasxodlar)
+router.post('/', validation.CreateRasxod, rasxodControllers.createRasxod)
+router.get('/:id', validation.validateParamsId, rasxodControllers.getRasxod);
+router.patch('/:id', validation.UpdateRasxod, rasxodControllers.updateRasxod);
+router.delete('/:id', validation.validateParamsId, rasxodControllers.deleteRasxod)
+
+export default router;

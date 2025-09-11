@@ -1,0 +1,13 @@
+import { Router } from "express";
+import * as mahsulotControllers from '../controllers/mahsulotlar.js'
+import * as validation from '../middleware/validation.js'
+
+const router = Router();
+
+router.get('/', mahsulotControllers.getMahsulotlar);
+router.post('/', validation.CreateMahsulot, mahsulotControllers.createMahsulot);
+router.get('/:id', mahsulotControllers.getMahsulot);
+router.patch('/:id', validation.UpdateMahsulot, mahsulotControllers.updateMahsulot);
+router.delete('/:id', mahsulotControllers.deleteMahsulot);
+
+export default router;

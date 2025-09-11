@@ -1,0 +1,13 @@
+import { Router } from "express";
+import * as sotuvlarControllers from '../controllers/sotuvlar.js'
+import * as validation from '../middleware/validation.js'
+
+const router = Router();
+
+router.get('/', sotuvlarControllers.getSotuvlar);
+router.post('/', validation.CreateSavdo, sotuvlarControllers.createSotuv);
+router.get('/:id', sotuvlarControllers.getSotuv);
+router.patch('/:id', validation.UpdateSavdo, sotuvlarControllers.updateSotuv);
+router.delete('/:id', sotuvlarControllers.deleteSotuv)
+
+export default router

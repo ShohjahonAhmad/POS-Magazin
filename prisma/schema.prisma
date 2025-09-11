@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Mahsulot {
+  id              String     @id @map("mahsulot_id")
+  nomi            String
+  olinganNarx     Decimal    @db.Decimal(10, 2)
+  sotishNarx      Decimal    @db.Decimal(10, 2)
+  miqdor          Int
+  razmer          String?
+  yaratilganVaqt  DateTime   @default(now()) @map("yaratilgan_vaqt")
+  yangilanganVaqt DateTime   @updatedAt @map("yangilangan_vaqt")
+  kategoriya      Kategoriya @relation(fields: [kategoriyaId], references: [id])
+  kategoriyaId    Int
+  Sotuv           Sotuv[]
+
+  @@map("mahsulotlar")
+}
+
+model Kategoriya {
+  id          Int        @id @default(autoincrement()) @map("kategoriya_id")
+  nomi        String     @unique
+  mahsulotlar Mahsulot[]
+
+  @@map("kategoriyalar")
+}
+
+model Foydalanuvchi {
+  id              Int      @id @default(autoincrement()) @map("foydalanuvchi_id")
+  ism             String
+  familiya        String
+  parol           String
+  yaratilganVaqt  DateTime @default(now()) @map("yaratilgan_vaqt")
+  yangilanganVaqt DateTime @updatedAt @map("yangilangan_vaqt")
+  role            Role?
+
+  @@map("foydalanuvchilar")
+}
+
+model Rasxod {
+  id      Int      @id @default(autoincrement()) @map("rasxod_id")
+  summa   Decimal  @db.Decimal(10, 2)
+  izoh    String
+  kun     DateTime @default(now())
+  valyuta Valyuta  @default(UZS)
+
+  @@map("rasxodlar")
+}
+
+model Sotuv {
+  id             Int      @id @default(autoincrement()) @map("sotuv_id")
+  mahsulotId     String   @map("mahsulot_id")
+  mahsulotNomi   String   @map("mahsulot_nomi")
+  miqdor         Int
+  tushum         Decimal  @db.Decimal(10, 2)
+  valyuta        Valyuta  @default(UZS)
+  yaratilganVaqt DateTime @default(now())
+  mahsulot       Mahsulot @relation(fields: [mahsulotId], references: [id])
+
+  @@map("sotuvlar")
+}
+
+enum Valyuta {
+  UZS
+  USD
+  RUB
+  EUR
+  GBP
+}
+
+enum Role {
+  ADMIN
+}
