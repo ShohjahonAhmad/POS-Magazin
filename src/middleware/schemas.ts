@@ -1,5 +1,7 @@
-import { Prisma, Valyuta } from '@prisma/client';
+import { Prisma, Role, Valyuta } from '@prisma/client';
 import z, { ZodLazy } from 'zod';
+import passwordRules from '../utils/passwordRules.js'
+
 
 const MahsulotLazy: ZodLazy<any> = z.lazy(() => MahsulotSchema) 
 
@@ -81,3 +83,49 @@ export const SavdoCreate = SavdoSchema.pick({
 }).strict()
 
 export const SavdoUpdate = SavdoCreate.partial().strict();
+
+export const FoydalanuvchiSchema = z.object({
+  id: z.number().int().nonnegative(),
+  ism: z.string().min(3, "Ism kamida 3 belgidan iborat bo'lishi shar"),
+  familiya: z.string().min(3, "Familiya kamida 3 belgidan iborat bo'lishi shar"),
+  parol: z.string(),
+  email: z.email("Noto'g'ri elektron pochta (email)"),
+  emailTasdiqlanganVaqt: z.coerce.date().optional(),
+  yaratilganVaqt: z.coerce.date().optional(),
+  yangilanganVaqt: z.coerce.date().optional(),
+  role: z.enum(Role).optional(),
+})
+
+export const FoydalanuvchiCreate = FoydalanuvchiSchema.pick({
+  ism: true,
+  familiya: true,
+  parol: true,
+  email: true,
+}).strict().superRefine((data, ctx) => {
+  for(const rule of passwordRules){
+    if(!rule.check(data.parol)){
+      ctx.addIssue({
+        code: 'custom',
+        message: rule.message,
+        path: ['parol']
+      })
+    }
+  }
+})
+
+export const FoydalanuvchiUpdate = FoydalanuvchiSchema.pick({
+  ism: true,
+  familiya: true,
+  parol: true
+}).partial().strict().superRefine((data, ctx) => {
+    if(data.parol){
+      for(const rule of passwordRules){
+        if(!rule.check(data.parol)){
+          ctx.addIssue({
+            code: 'custom',
+            message: rule.message,
+            path: ['parol']
+          })
+        }
+    }
+  }})

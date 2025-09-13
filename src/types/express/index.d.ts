@@ -1,5 +1,8 @@
 declare namespace Express {
     export interface Request{
-        validatedQuery: any
+        validatedQuery: any,
+        user?: {
+            id: number
+        }
     }
 }
