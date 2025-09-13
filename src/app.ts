@@ -5,6 +5,7 @@ import rasxodlarRouter from './routers/rasxodlar.js'
 import sotuvlarRouter from './routers/sotuvlar.js'
 import statistikaRouter from './routers/statistika.js'
 import authRouter from './routers/auth.js'
+import foydalanuvchilarRouter from './routers/foydalanuvchilar.js'
 import errorHandler from './middleware/errorHandler.js'
 import cookieParser from 'cookie-parser';
 dotenv.config();
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/auth', authRouter);
+app.use('/foydalanuvchilar', foydalanuvchilarRouter)
 app.use('/statistika', statistikaRouter)
 app.use('/sotuvlar', sotuvlarRouter)
 app.use('/mahsulotlar', mahsulotlarRouter)

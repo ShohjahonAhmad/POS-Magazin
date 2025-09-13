@@ -5,6 +5,7 @@ import rasxodlarRouter from './routers/rasxodlar.js';
 import sotuvlarRouter from './routers/sotuvlar.js';
 import statistikaRouter from './routers/statistika.js';
 import authRouter from './routers/auth.js';
+import foydalanuvchilarRouter from './routers/foydalanuvchilar.js';
 import errorHandler from './middleware/errorHandler.js';
 dotenv.config();
 const app = express();
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
     res.send("Hello");
 });
 app.use('/auth', authRouter);
+app.use('/foydalanuvchilar', foydalanuvchilarRouter);
 app.use('/statistika', statistikaRouter);
 app.use('/sotuvlar', sotuvlarRouter);
 app.use('/mahsulotlar', mahsulotlarRouter);
