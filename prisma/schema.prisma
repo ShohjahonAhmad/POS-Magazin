@@ -38,15 +38,16 @@ model Kategoriya {
 }
 
 model Foydalanuvchi {
-  id                    Int       @id @default(autoincrement()) @map("foydalanuvchi_id")
+  id                    Int                      @id @default(autoincrement()) @map("foydalanuvchi_id")
   ism                   String
   familiya              String
   parol                 String
-  email                 String    @unique
-  emailTasdiqlanganVaqt DateTime? @map("email_tasdiqlangan_vaqt")
-  yaratilganVaqt        DateTime  @default(now()) @map("yaratilgan_vaqt")
-  yangilanganVaqt       DateTime  @updatedAt @map("yangilangan_vaqt")
+  email                 String                   @unique
+  emailTasdiqlanganVaqt DateTime?                @map("email_tasdiqlangan_vaqt")
+  yaratilganVaqt        DateTime                 @default(now()) @map("yaratilgan_vaqt")
+  yangilanganVaqt       DateTime                 @updatedAt @map("yangilangan_vaqt")
   role                  Role?
+  verificationToken     EmailVerificationToken[]
 
   @@map("foydalanuvchilar")
 }
@@ -72,6 +73,17 @@ model Sotuv {
   mahsulot       Mahsulot @relation(fields: [mahsulotId], references: [id])
 
   @@map("sotuvlar")
+}
+
+model EmailVerificationToken {
+  id              Int           @id @default(autoincrement()) @map("email_token_id")
+  token           String        @unique
+  muddati         DateTime
+  yaratilganVaqt  DateTime      @default(now()) @map("yaratilgan_vaqt")
+  foydalanuvchi   Foydalanuvchi @relation(fields: [foydalanuvchiId], references: [id], onDelete: Cascade)
+  foydalanuvchiId Int
+
+  @@map("email_tokens")
 }
 
 enum Valyuta {

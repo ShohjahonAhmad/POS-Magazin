@@ -17,7 +17,7 @@ export const updateFoydalanuvchi = async (req, res, next) => {
     const userId = req.user?.id;
     const { parol, ...rest } = req.body;
     const hashedPassword = parol ? await bcrypt.hash(parol, 10) : undefined;
-    const user = await prisma.foydalanuvchi.update({
+    const foydalanuvchi = await prisma.foydalanuvchi.update({
         where: { id: userId },
         data: {
             ...rest,
@@ -25,7 +25,12 @@ export const updateFoydalanuvchi = async (req, res, next) => {
         },
         omit: omittedColumns
     });
-    res.json({ user });
+    const { emailTasdiqlanganVaqt, ...user } = foydalanuvchi;
+    const response = {
+        ...user,
+        emailTasdiqlangan: !!emailTasdiqlanganVaqt
+    };
+    res.json({ foydalanuvchi: response });
 };
 export const getFoydalanuvchi = async (req, res, next) => {
     const userId = parseInt(req.params.id);
@@ -44,7 +49,7 @@ export const getFoydalanuvchi = async (req, res, next) => {
         ...rest,
         emailTasdiqlangan: !!emailTasdiqlanganVaqt
     };
-    res.json({ user: response });
+    res.json({ foydalanuvchi: response });
 };
 export const deleteFoydalanuvchi = async (req, res, next) => {
     const userId = req.user?.id;

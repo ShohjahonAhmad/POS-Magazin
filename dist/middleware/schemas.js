@@ -114,3 +114,7 @@ export const FoydalanuvchiUpdate = FoydalanuvchiSchema.pick({
         }
     }
 });
+export const LoginSchema = FoydalanuvchiSchema.pick({
+    email: true,
+    parol: true
+}).strict();

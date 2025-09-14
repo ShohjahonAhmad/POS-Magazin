@@ -34,3 +34,4 @@ export const CreateSavdo = validateBody(schemas.SavdoCreate);
 export const UpdateSavdo = validateBody(schemas.SavdoUpdate);
 export const CreateFoydalanuvchi = validateBody(schemas.FoydalanuvchiCreate);
 export const UpdateFoydalanuvchi = validateBody(schemas.FoydalanuvchiUpdate);
+export const LoginFoydalanuvchi = validateBody(schemas.LoginSchema);

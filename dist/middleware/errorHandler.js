@@ -14,6 +14,13 @@ const errorHandler = (err, req, res, next) => {
         res.status(400).json({ error: err.validationErrors });
         return;
     }
+    if (err.message === 'email error') {
+        res.status(500).json({ error: "Elektron pochta jo'natib bo'lmadi. Iltimos, keyinroq urinib ko'ring" });
+    }
+    if (err.message === 'base_url or user error') {
+        res.status(500).json({ error: "Elektron pochta jo'natishda xatolik yuz berdi. Iltimos, keyinroq urinib ko'ring" });
+        return;
+    }
     if (err.code === 'P2002') {
         const fields = Array.isArray(err.meta?.target) ? err.meta?.target.join(', ') : err.meta?.target;
         res.status(409).json({ error: `Yagonalik cheklovi buzildi: ${fields}. Bu mahsulot allaqachon omborxonada mavjud` });
