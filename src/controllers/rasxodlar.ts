@@ -38,6 +38,8 @@ export const createRasxod: RequestHandler = async (req, res) => {
         return res.status(400).json({ error: "Invalid date format" });
       }
 
+    kunBody.setHours(12, 0, 0, 0)
+
     const rasxod = await prisma.rasxod.create({
         data: {
             ...req.body,

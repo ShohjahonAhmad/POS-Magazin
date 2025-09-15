@@ -1,4 +1,5 @@
 import prisma from "../prisma.js";
+import getWeekRange from "../utils/getWeekRange.js";
 export const getMonthlyRasxodlar = async (req, res) => {
     const year = parseInt(req.query.yil) || new Date().getFullYear();
     const rasxodlar = await prisma.$queryRaw `
@@ -128,4 +129,34 @@ export const getAnnualStats = async (req, res) => {
         };
     });
     res.json({ stats });
+};
+export const getWeeklyStats = async (req, res) => {
+    const dayInput = req.body?.kun;
+    const day = dayInput ? new Date(dayInput) : new Date();
+    const { start, end } = getWeekRange(day);
+    end.setHours(23, 59, 59, 999);
+    const stats = await prisma.$queryRaw `
+  WITH kunlar AS (
+    SELECT generate_series(${start}::date, ${end}::date, interval '1 day') AS kun
+  )
+  SELECT 
+    to_char(kunlar.kun, 'YYYY-MM-DD') AS sana,
+    COALESCE(SUM(s.tushum), 0)::bigint AS tushum,
+    COALESCE(SUM(r.summa), 0)::bigint AS rasxod,
+    COALESCE(SUM(s.miqdor), 0)::bigint AS savdo
+  FROM kunlar
+  LEFT JOIN sotuvlar s 
+    ON s."yaratilganVaqt"::date = kunlar.kun::date
+  LEFT JOIN rasxodlar r 
+    ON r."kun"::date = kunlar.kun::date
+  GROUP BY kunlar.kun
+  ORDER BY kunlar.kun;`;
+    const uzbekDays = ['Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba', 'Yakshanba'];
+    const serialized = stats.map((row, idx) => ({
+        kun: uzbekDays[idx], // replace sana with day name
+        tushum: row.tushum.toString(),
+        rasxod: row.rasxod.toString(),
+        savdo: row.savdo.toString(),
+    }));
+    res.json({ haftaBoshi: start, haftaOxiri: end, stats: serialized });
 };

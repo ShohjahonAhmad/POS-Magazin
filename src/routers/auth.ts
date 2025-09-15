@@ -7,8 +7,8 @@ import * as validation from '../middleware/validation.js'
 const router = Router()
 
 router.post('/registratsiya', validation.CreateFoydalanuvchi, authControllers.register);
-router.post('/login', authenticate, validation.LoginFoydalanuvchi, authControllers.login);
-router.post('/logout', authControllers.logout);
+router.post('/login', validation.LoginFoydalanuvchi, authControllers.login);
+router.post('/logout', authenticate, authControllers.logout);
 router.get('/tasdiq-email', authControllers.verifyEmail);
 router.post('/jonat-email', authControllers.resendEmail);
 router.post('/refresh-token', authControllers.refreshToken)

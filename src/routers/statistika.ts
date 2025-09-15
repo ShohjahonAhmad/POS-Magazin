@@ -8,5 +8,6 @@ router.get('/oylik-tushumlar', statistikaControllers.getMonthlyTushumlar)
 router.get('/oylik-savdolar', statistikaControllers.getMonthlySavdolar)
 
 router.get('/yillik', statistikaControllers.getAnnualStats);
+router.get('/haftalik', statistikaControllers.getWeeklyStats);
 
 export default router;

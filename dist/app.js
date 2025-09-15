@@ -9,6 +9,7 @@ import foydalanuvchilarRouter from './routers/foydalanuvchilar.js';
 import errorHandler from './middleware/errorHandler.js';
 import authenticated from './middleware/authenticated.js';
 import authenticate from './middleware/authenticate.js';
+import notFound from './middleware/notFound.js';
 import cookieParser from 'cookie-parser';
 import task from './utils/deleteExpiredTokens.js';
 dotenv.config();
@@ -27,6 +28,7 @@ app.use('/statistika', statistikaRouter);
 app.use('/sotuvlar', sotuvlarRouter);
 app.use('/mahsulotlar', mahsulotlarRouter);
 app.use('/rasxodlar', rasxodlarRouter);
+app.use(notFound);
 app.use(errorHandler);
 task.start();
 app.listen(port, () => {
