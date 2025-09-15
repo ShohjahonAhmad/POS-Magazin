@@ -6,6 +6,7 @@ import sotuvlarRouter from './routers/sotuvlar.js';
 import statistikaRouter from './routers/statistika.js';
 import authRouter from './routers/auth.js';
 import foydalanuvchilarRouter from './routers/foydalanuvchilar.js';
+import kategoriyalarRouter from './routers/kategoriyalar.js'
 import errorHandler from './middleware/errorHandler.js';
 import authenticated from './middleware/authenticated.js';
 import authenticate from './middleware/authenticate.js';
@@ -15,7 +16,7 @@ import task from './utils/deleteExpiredTokens.js';
 dotenv.config();
 
 const app = express();
-const port = 8080;
+const port = process.env.PORT;
 app.use(express.json());
 app.use(cookieParser());
 
@@ -29,6 +30,7 @@ app.use(authenticated);
 app.use('/foydalanuvchilar', foydalanuvchilarRouter);
 app.use('/statistika', statistikaRouter);
 app.use('/sotuvlar', sotuvlarRouter);
+app.use('/kategoriyalar', kategoriyalarRouter)
 app.use('/mahsulotlar', mahsulotlarRouter);
 app.use('/rasxodlar', rasxodlarRouter);
 app.use(notFound);
