@@ -14,7 +14,7 @@ export const sendEmailToken = async (email:string, token:string) => {
         const link = `${BASE_URL}/auth/tasdiq-email?token=${token}`;
 
         await transporter.sendMail({
-            from: `POS-MAGAZIN <${USER}>`,
+            from: `POS-MAGAZIN <pos@magazin.uz>`,
             to: email,
             subject: "Iltimos elektron pochtangizni tasdiqlang",
             text: `Elektron pochtangizni tasdiqlash uchun link ustiga bosing: ${link}`,

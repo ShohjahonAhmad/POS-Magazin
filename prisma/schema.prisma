@@ -48,6 +48,7 @@ model Foydalanuvchi {
   yangilanganVaqt       DateTime                 @updatedAt @map("yangilangan_vaqt")
   role                  Role?
   verificationToken     EmailVerificationToken[]
+  refreshToken          RefreshToken[]
 
   @@map("foydalanuvchilar")
 }
@@ -84,6 +85,14 @@ model EmailVerificationToken {
   foydalanuvchiId Int
 
   @@map("email_tokens")
+}
+
+model RefreshToken {
+  id              Int           @id @default(autoincrement()) @map("refresh_token_id")
+  token           String        @unique
+  yaratilganVaqt  DateTime      @default(now()) @map("yaratilgan_vaqt")
+  Foydalanuvchi   Foydalanuvchi @relation(fields: [foydalanuvchiId], references: [id], onDelete: Cascade)
+  foydalanuvchiId Int
 }
 
 enum Valyuta {

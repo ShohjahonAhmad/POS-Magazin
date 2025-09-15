@@ -1,15 +1,16 @@
 import { Router } from "express";
 import * as authControllers from '../controllers/auth.js'
-import authenticated from "../middleware/authenticated.js";
+import authenticate from "../middleware/authenticate.js";
+import authenticated  from "../middleware/authenticated.js";
 import * as validation from '../middleware/validation.js'
 
 const router = Router()
 
 router.post('/registratsiya', validation.CreateFoydalanuvchi, authControllers.register);
-router.post('/login', authControllers.login);
-router.post('/logout', authenticated, authControllers.logout);
+router.post('/login', authenticate, validation.LoginFoydalanuvchi, authControllers.login);
+router.post('/logout', authControllers.logout);
 router.get('/tasdiq-email', authControllers.verifyEmail);
 router.post('/jonat-email', authControllers.resendEmail);
 router.post('/refresh-token', authControllers.refreshToken)
-router.get('/me', authenticated, authControllers.getMe)
+router.get('/me', authenticate, authenticated, authControllers.getMe)
 export default router;

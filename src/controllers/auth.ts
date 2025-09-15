@@ -2,6 +2,9 @@ import { RequestHandler } from "express";
 import prisma from "../prisma.js";
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 import { sendEmailToken } from "../utils/sendEmail.js";
 
 const saltRounds = 10;
@@ -63,12 +66,82 @@ export const register: RequestHandler = async (req, res, next) => {
 }
 
 export const login: RequestHandler = async (req, res, next) => {
-    res.sendStatus(200)
+    const {email, parol} = req.body;
+
+    const foydalanuvchi = await prisma.foydalanuvchi.findUnique({
+        where: {
+            email
+        }
+    })
+
+    if(!foydalanuvchi){
+        res.status(401).json({error: "Elektron pochta yoki parol xato"});
+        return;
+    }
+
+    if(!foydalanuvchi.emailTasdiqlanganVaqt){
+        res.status(403).json({error: "Avval elektron pochtangizni tasdiqlang"});
+        return;
+    }
+
+    const ok = await bcrypt.compare(parol, foydalanuvchi.parol);
+
+    if(!ok){
+        res.status(401).json({error: "Elektron pochta yoki parol xato"});
+        return;
+    } 
+
+    const accessToken = generateAccessToken(foydalanuvchi.id)
+    const refreshToken = generateRefreshToken(foydalanuvchi.id)
+
+    await prisma.refreshToken.deleteMany({
+        where: {
+            foydalanuvchiId: foydalanuvchi.id
+        }
+    })
+
+    await prisma.refreshToken.create({
+        data: {
+            token: refreshToken,
+            foydalanuvchiId: foydalanuvchi.id
+        }
+    })
+
+    res.cookie('jwt', refreshToken, {
+        httpOnly: true, secure: false, sameSite: 'lax', maxAge: 24 * 60 * 60 * 1000
+    })
+
+    res.json({accessToken})
+}
+
+function generateAccessToken (id: number) {
+    return jwt.sign({
+        id},
+        process.env.ACCESS_TOKEN_SECRET!,
+        {expiresIn: '1h'} );
+} 
+
+function generateRefreshToken (id: number) {
+    return jwt.sign(   
+                {id}, 
+                process.env.REFRESH_TOKEN_SECRET!, 
+                {expiresIn: '1d'})
 }
 
 export const logout: RequestHandler = async (req, res, next) => {
-    res.sendStatus(200)
-}
+    const refreshToken = req.cookies?.jwt;
+    if (!refreshToken) {
+        res.sendStatus(204);
+        return;
+    }
+
+    await prisma.refreshToken.deleteMany({
+        where: { token: refreshToken }
+    });
+
+    res.clearCookie('jwt', { httpOnly: true, secure: false, sameSite: 'lax' });
+    res.sendStatus(204);
+};
 
 export const verifyEmail: RequestHandler = async (req, res, next) => {
     const token = req.query.token as string | undefined;
@@ -161,7 +234,34 @@ export const resendEmail: RequestHandler = async (req, res, next) => {
 }
 
 export const refreshToken: RequestHandler = async (req, res, next) => {
-    res.sendStatus(200)
+    const cookie = req.cookies;
+    if(!cookie?.jwt) {
+        res.status(401).json({error: "Iltimos login"});
+        console.log("salom")
+        return;
+    }
+    const refreshToken = cookie.jwt
+
+    const token = await prisma.refreshToken.findUnique({
+        where: {
+            token: refreshToken
+        }
+    })
+
+    if(!token){
+        res.status(403).json({error: "Iltimos login"});
+        return;
+    }
+
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!, (err: any, decoded:any) => {
+        if(err || token.foydalanuvchiId !== decoded.id ){
+            res.status(403).json({error: "Iltimos login"});
+            return;
+        }
+        const accessToken = generateAccessToken(token!.foydalanuvchiId);
+        res.json({accessToken});
+        return;
+    })
 }
 
 export const getMe: RequestHandler = async (req, res, next) => {

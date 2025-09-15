@@ -1,5 +1,6 @@
 const authenticated = (req, res, next) => {
-    if (!req.user) {
+    console.log(req.user);
+    if (!req.user?.id) {
         res.status(401).json({ error: "Not authenticated" });
         return;
     }

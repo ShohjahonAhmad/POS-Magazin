@@ -10,7 +10,6 @@ import prisma from "./prisma.js";
 // })
 
 // console.log(user)
-
 const emailToken = await prisma.emailVerificationToken.findFirst()
 
 console.log(emailToken)
