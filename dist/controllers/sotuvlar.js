@@ -49,6 +49,10 @@ export const getSotuv = async (req, res, next) => {
             id: id
         }
     });
+    if (!sotuv) {
+        res.status(404).json({ error: "Sotuv topilmadi" });
+        return;
+    }
     res.json({ sotuv });
 };
 export const createSotuv = async (req, res, next) => {

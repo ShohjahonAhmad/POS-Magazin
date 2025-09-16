@@ -11,6 +11,6 @@ router.post('/login', validation.LoginFoydalanuvchi, authControllers.login);
 router.post('/logout', authenticate, authControllers.logout);
 router.get('/tasdiq-email', authControllers.verifyEmail);
 router.post('/jonat-email', authControllers.resendEmail);
-router.post('/refresh-token', authControllers.refreshToken)
-router.get('/me', authenticate, authenticated, authControllers.getMe)
+router.post('/refresh-token', authenticate, authControllers.refreshToken)
+router.get('/me', authenticate, authControllers.getMe)
 export default router;

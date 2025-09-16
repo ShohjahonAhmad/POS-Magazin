@@ -33,7 +33,7 @@ export const getKategoriyalar: RequestHandler = async (req, res, next) => {
 
 export const createKategoriya: RequestHandler = async (req, res, next) => {
     try{
-        const nomi = (req.body.kategoriya as string)?.trim();
+        const nomi = (req.body.kategoriya as string)?.trim().toLowerCase();
 
         if(!nomi) {
             res.status(400).json({error: "So'rovda kategoriya nomi berilishi shart"});

@@ -18,7 +18,7 @@ export const register: RequestHandler = async (req, res, next) => {
         }
     })
 
-    if(existing) {
+    if(existing) {  
         res.status(409).json({error: "Ushbu elektron pochta allaqachon ro'yxatdan o'tgan"});
         return
     }
@@ -172,7 +172,7 @@ export const verifyEmail: RequestHandler = async (req, res, next) => {
     })
 
     if(!user) {
-        res.status(400).json({error: "User not found"});
+        res.status(404).json({error: "User not found"});
         return;
     }
 
@@ -285,7 +285,7 @@ export const getMe: RequestHandler = async (req, res, next) => {
 
     const response = {
         ...rest,
-        emailVerified: !!emailTasdiqlanganVaqt
+        emailTasdiqlangan: !!emailTasdiqlanganVaqt
     }
 
     res.json({me: response})

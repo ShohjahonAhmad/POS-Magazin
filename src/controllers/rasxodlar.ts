@@ -35,10 +35,10 @@ export const createRasxod: RequestHandler = async (req, res) => {
     
 
     if (isNaN(kunBody.getTime())) {
-        return res.status(400).json({ error: "Invalid date format" });
+        return res.status(400).json({ error: "Invalid kun format" });
       }
 
-    kunBody.setHours(12, 0, 0, 0)
+    kunBody.setHours(12, 0, 0, 0);
 
     const rasxod = await prisma.rasxod.create({
         data: {
@@ -47,7 +47,7 @@ export const createRasxod: RequestHandler = async (req, res) => {
         }
     })
 
-    res.status(201).json({rasxod})
+    res.status(201).json({rasxod});
 } 
 
 export const getRasxod: RequestHandler = async (req, res) => {
@@ -82,7 +82,7 @@ export const updateRasxod: RequestHandler = async (req, res) => {
         }
     })
 
-    res.json({rasxod})
+    res.json({rasxod});
 } 
 
 export const deleteRasxod: RequestHandler = async (req, res) => {
@@ -94,5 +94,5 @@ export const deleteRasxod: RequestHandler = async (req, res) => {
         }
     })
 
-    res.sendStatus(204)
+    res.sendStatus(204);
 } 

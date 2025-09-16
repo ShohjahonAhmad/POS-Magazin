@@ -28,7 +28,7 @@ export const getKategoriyalar = async (req, res, next) => {
 };
 export const createKategoriya = async (req, res, next) => {
     try {
-        const nomi = req.body.kategoriya?.trim();
+        const nomi = req.body.kategoriya?.trim().toLowerCase();
         if (!nomi) {
             res.status(400).json({ error: "So'rovda kategoriya nomi berilishi shart" });
             return;

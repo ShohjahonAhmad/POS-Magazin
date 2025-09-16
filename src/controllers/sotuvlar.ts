@@ -61,6 +61,11 @@ export const getSotuv: RequestHandler = async (req, res, next) => {
         }
     })
 
+    if(!sotuv){
+        res.status(404).json({error: "Sotuv topilmadi"});
+        return;
+    }
+
     res.json({sotuv})
 }
     

@@ -25,7 +25,7 @@ export const getRasxodlar = async (req, res) => {
 export const createRasxod = async (req, res) => {
     const kunBody = parse(req.body.kun, 'MM/dd/yyyy', new Date());
     if (isNaN(kunBody.getTime())) {
-        return res.status(400).json({ error: "Invalid date format" });
+        return res.status(400).json({ error: "Invalid kun format" });
     }
     kunBody.setHours(12, 0, 0, 0);
     const rasxod = await prisma.rasxod.create({
