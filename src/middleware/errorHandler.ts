@@ -27,6 +27,10 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
         res.status(500).json({error: "Elektron pochta jo'natishda xatolik yuz berdi. Iltimos, keyinroq urinib ko'ring"});
         return
     }
+    if(err.code === 'P2003'){
+        res.status(400).json({error: "Bu resursni o'chirib bo'lmaydi"});
+        return;
+    }
 
     if(err.code === 'P2002'){
         const fields = Array.isArray(err.meta?.target) ? err.meta?.target.join(', ') : err.meta?.target

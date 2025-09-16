@@ -71,7 +71,7 @@ model Sotuv {
   tushum         Decimal  @db.Decimal(10, 2)
   valyuta        Valyuta  @default(UZS)
   yaratilganVaqt DateTime @default(now())
-  mahsulot       Mahsulot @relation(fields: [mahsulotId], references: [id])
+  mahsulot       Mahsulot @relation(fields: [mahsulotId], references: [id], onDelete: SetNull)
 
   @@map("sotuvlar")
 }
