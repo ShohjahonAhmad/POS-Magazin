@@ -3,7 +3,7 @@ export const getMahsulotlar = async (req, res) => {
     const categoryQuery = req.query.kategoriya;
     console.log(categoryQuery);
     const mahsulotlar = await prisma.mahsulot.findMany({
-        where: categoryQuery ? { kategoriya: { nomi: categoryQuery } } : undefined,
+        where: categoryQuery ? { deletedAt: null, kategoriya: { nomi: categoryQuery } } : { deletedAt: null },
         orderBy: {
             yaratilganVaqt: 'desc'
         },
@@ -105,9 +105,12 @@ export const updateMahsulot = async (req, res) => {
 };
 export const deleteMahsulot = async (req, res) => {
     const mahsulotId = req.params.id;
-    await prisma.mahsulot.delete({
+    await prisma.mahsulot.update({
         where: {
             id: mahsulotId
+        },
+        data: {
+            deletedAt: new Date()
         }
     });
     res.sendStatus(204);

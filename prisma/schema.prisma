@@ -24,6 +24,7 @@ model Mahsulot {
   yangilanganVaqt DateTime   @updatedAt @map("yangilangan_vaqt")
   kategoriya      Kategoriya @relation(fields: [kategoriyaId], references: [id])
   kategoriyaId    Int
+  deletedAt       DateTime?
   Sotuv           Sotuv[]
 
   @@map("mahsulotlar")
@@ -64,14 +65,14 @@ model Rasxod {
 }
 
 model Sotuv {
-  id             Int       @id @default(autoincrement()) @map("sotuv_id")
-  mahsulotId     String?   @map("mahsulot_id")
-  mahsulotNomi   String    @map("mahsulot_nomi")
+  id             Int      @id @default(autoincrement()) @map("sotuv_id")
+  mahsulotId     String   @map("mahsulot_id")
+  mahsulotNomi   String   @map("mahsulot_nomi")
   miqdor         Int
-  tushum         Decimal   @db.Decimal(10, 2)
-  valyuta        Valyuta   @default(UZS)
-  yaratilganVaqt DateTime  @default(now())
-  mahsulot       Mahsulot? @relation(fields: [mahsulotId], references: [id], onDelete: SetNull)
+  tushum         Decimal  @db.Decimal(10, 2)
+  valyuta        Valyuta  @default(UZS)
+  yaratilganVaqt DateTime @default(now())
+  mahsulot       Mahsulot @relation(fields: [mahsulotId], references: [id])
 
   @@map("sotuvlar")
 }

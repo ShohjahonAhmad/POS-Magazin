@@ -8,5 +8,6 @@ import prisma from "./prisma.js";
 //     }
 // })
 // console.log(user)
-const emailToken = await prisma.emailVerificationToken.findFirst();
-console.log(emailToken);
+// const emailToken = await prisma.emailVerificationToken.findFirst()
+await prisma.sotuv.deleteMany();
+// console.log(emailToken)

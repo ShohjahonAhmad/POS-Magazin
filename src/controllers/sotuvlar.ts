@@ -140,6 +140,7 @@ export const updateSotuv: RequestHandler = async (req, res, next) => {
         return
     }
     const saleDiff =  miqdor - oldSotuv.miqdor;
+    
 
     const mahsulot = await prisma.mahsulot.findUnique({
         where: {
