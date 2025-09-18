@@ -12,6 +12,7 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     console.log(err.message);
     console.log(err.stack);
     console.log(err.code)
+    console.error(err)
 
     if(err instanceof ValidationError){
         res.status(400).json({error: err.validationErrors})
