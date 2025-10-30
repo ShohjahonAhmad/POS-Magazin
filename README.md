@@ -119,6 +119,4 @@ This project is licensed under the MIT License — you’re free to use, modify,
 📞 Contact
 
 If you have questions or suggestions, feel free to reach out:
-📧 your.email@example.com
-
-🌐 GitHub Profile
+📧 ahmshohjahon@gmail.com
